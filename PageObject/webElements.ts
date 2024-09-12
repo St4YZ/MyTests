@@ -1,29 +1,27 @@
-import { Page, expect } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 
-export class WebElements {
-  readonly page: Page;
-  constructor(page: Page) {
+class WebElements {
+  readonly firstNameField: Locator = this.page.getByLabel('First name');
+  readonly lastNameField: Locator = this.page.getByLabel('Last name');
+  readonly phoneNumberField: Locator = this.page.getByRole('textbox', { name: 'Enter phone number' });
+  readonly countryDropDown: Locator = this.page.getByRole('combobox');
+  readonly emailField: Locator = this.page.getByRole('textbox', { name: 'Email' })
+  readonly passwordField: Locator = this.page.getByRole('textbox', { name: 'Password' })
+  readonly checkBoxes: Locator = this.page.getByRole('checkbox')
+  readonly registerButton: Locator = this.page.getByRole('button', { name: 'Register' })
+  readonly succesAlert: Locator = this.page.getByRole('alert')
+  readonly iFrameLocator = this.page.frameLocator('#iframe-checkboxes')
+  readonly iFrameLearnMoreButton: Locator = this.iFrameLocator.getByRole('button', { name: 'Learn more' })
+  readonly iFrameShowTextLocator: Locator = this.iFrameLocator.locator('#show-text')
+  readonly checkBoxLabels: Locator = this.page.locator('.form-check label')
+  readonly submitButton: Locator = this.page.getByRole('button', { name: 'Submit' })
+  readonly innerTextsOfCheckBoxLabels: Locator = this.page.locator('.form-check label')
+  readonly resultText: Locator = this.page.locator('#result-text')
+  constructor(readonly page: Page) {
     this.page = page;
   }
 }
-
 export class Actions extends WebElements {
-  readonly firstNameField = this.page.getByLabel('First name');
-  readonly lastNameField = this.page.getByLabel('Last name');
-  readonly phoneNumberField = this.page.getByRole('textbox', { name: 'Enter phone number' });
-  readonly countryDropDown = this.page.getByRole('combobox');
-  readonly emailField = this.page.getByRole('textbox', { name: 'Email' })
-  readonly passwordField = this.page.getByRole('textbox', { name: 'Password' })
-  readonly checkBoxes = this.page.getByRole('checkbox')
-  readonly registerButton = this.page.getByRole('button', { name: 'Register' })
-  readonly succesAlert = this.page.getByRole('alert')
-  readonly iFrameLocator = this.page.frameLocator('#iframe-checkboxes')
-  readonly iFrameLearnMoreButton = this.page.frameLocator('#iframe-checkboxes').getByRole('button', { name: 'Learn more' })
-  readonly iFrameShowTextLocator = this.page.frameLocator('#iframe-checkboxes').locator('#show-text')
-  readonly checkBoxLabels = this.page.locator('.form-check label')
-  readonly submitButton = this.page.getByRole('button', { name: 'Submit' })
-  readonly innerTextsOfCheckBoxLabels = this.page.locator('.form-check label')
-  readonly resultText = this.page.locator('#result-text')
   constructor(page: Page) {
     super(page);
   }
