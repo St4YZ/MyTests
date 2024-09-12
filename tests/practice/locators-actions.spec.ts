@@ -1,54 +1,55 @@
 import { test, expect } from '@playwright/test';
 import { MainPage } from '../../PageObject/mainPage';
-import { WebElements } from '../../PageObject/webElements';
+import { Actions } from '../../PageObject/webElements';
+import { faker } from '@faker-js/faker';
 
 test('Fill out register form', async ({ page }) => {
     const mainPage = new MainPage(page);
-    const webElements = new WebElements(page);
+    const actions = new Actions(page);
     await mainPage.gotoRegisterPage();
-    await webElements.fillFirstNameField();
-    await webElements.fillLastNameField();
-    await webElements.fillPhoneNumberField();
-    await webElements.selectCountryOption();
-    await webElements.fillEmailField();
-    await webElements.fillPasswordField();
-    await webElements.checkTermsAndConditionsCheckbox();
-    await webElements.clickAtRegisterButton();
-    await expect(await webElements.getSuccessAlert()).toBeVisible();
+    await actions.fillFirstName(faker.person.firstName());
+    await actions.fillLastName(faker.person.lastName());
+    await actions.fillPhoneNumber(faker.phone.number({ style: 'international' }));
+    await actions.selectCountry(faker.location.country());
+    await actions.fillEmailField(faker.internet.email());
+    await actions.fillPasswordField(faker.internet.password());
+    await actions.checkTermsAndConditionsCheckbox();
+    await actions.clickAtRegisterButton();
+    await expect(actions.succesAlert).toBeVisible();
 })
 
 test('Click inside frame', async ({ page }) => {
     const mainPage = new MainPage(page);
-    const webElements = new WebElements(page);
+    const actions = new Actions(page);
     await mainPage.gotoIFramePage();
-    await webElements.clickAtIFrameLearnMoreButton();
-    await expect(await webElements.getIFrameShowTextLocator()).toBeVisible();
+    await actions.clickAtIFrameLearnMoreButton();
+    await expect(actions.iFrameShowTextLocator).toBeVisible();
 })
 
 test('Checkboxes', async ({ page }) => {
     const mainPage = new MainPage(page);
-    const webElements = new WebElements(page);
+    const actions = new Actions(page);
     await mainPage.gotoCheckBoxPage();
-    await webElements.checkAllCheckBoxes();
-    await expect(await webElements.getSubmitButton()).toBeEnabled();
-    expect(await webElements.getInnerTextsOfCheckBoxLabels()).toEqual(["One", "Two", "Three"]);
-    await expect(await webElements.getCheckBox()).toHaveCount(3);
+    await actions.checkAllCheckBoxes();
+    await expect(actions.submitButton).toBeEnabled();
+    expect(await actions.innerTextsOfCheckBoxes()).toEqual(["One", "Two", "Three"]);
+    await expect(actions.checkBoxes).toHaveCount(3);
 })
 
 test('Case: Checkboxes are not selected.', async ({ page }) => {
     const mainPage = new MainPage(page);
-    const webElements = new WebElements(page);
+    const actions = new Actions(page);
     await mainPage.gotoCheckBoxPage();
-    await webElements.clickAtSubmitButton();
-    await expect(await webElements.getResultText()).toBeHidden();
+    await actions.clickAtSubmitButton();
+    await expect(actions.resultText).toBeHidden();
 })
 
 test('Case: Checkboxes are selected.', async ({ page }) => {
     const mainPage = new MainPage(page);
-    const webElements = new WebElements(page);
+    const actions = new Actions(page);
     await mainPage.gotoCheckBoxPage();
-    await webElements.checkSpecificCheckBox(0);
-    await webElements.checkSpecificCheckBox(1);
-    await webElements.clickAtSubmitButton();
-    await expect(await webElements.getResultText()).toBeVisible();
+    await actions.checkSpecificCheckBox(0);
+    await actions.checkSpecificCheckBox(1);
+    await actions.clickAtSubmitButton();
+    await expect(actions.resultText).toBeVisible();
 })

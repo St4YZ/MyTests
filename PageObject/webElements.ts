@@ -1,98 +1,73 @@
 import { Page, expect } from '@playwright/test';
-import { faker } from '@faker-js/faker';
 
 export class WebElements {
   readonly page: Page;
-
   constructor(page: Page) {
     this.page = page;
   }
+}
 
-  async getFirstNameLabel() {
-    return this.page.getByLabel('First name')
+export class Actions extends WebElements {
+  readonly firstNameField = this.page.getByLabel('First name');
+  readonly lastNameField = this.page.getByLabel('Last name');
+  readonly phoneNumberField = this.page.getByRole('textbox', { name: 'Enter phone number' });
+  readonly countryDropDown = this.page.getByRole('combobox');
+  readonly emailField = this.page.getByRole('textbox', { name: 'Email' })
+  readonly passwordField = this.page.getByRole('textbox', { name: 'Password' })
+  readonly checkBoxes = this.page.getByRole('checkbox')
+  readonly registerButton = this.page.getByRole('button', { name: 'Register' })
+  readonly succesAlert = this.page.getByRole('alert')
+  readonly iFrameLocator = this.page.frameLocator('#iframe-checkboxes')
+  readonly iFrameLearnMoreButton = this.page.frameLocator('#iframe-checkboxes').getByRole('button', { name: 'Learn more' })
+  readonly iFrameShowTextLocator = this.page.frameLocator('#iframe-checkboxes').locator('#show-text')
+  readonly checkBoxLabels = this.page.locator('.form-check label')
+  readonly submitButton = this.page.getByRole('button', { name: 'Submit' })
+  readonly innerTextsOfCheckBoxLabels = this.page.locator('.form-check label')
+  readonly resultText = this.page.locator('#result-text')
+  constructor(page: Page) {
+    super(page);
   }
-  async getLastNameLabel() {
-    return this.page.getByLabel('Last name')
+  // Actions 
+  async fillFirstName(name: string) {
+    await this.firstNameField.fill(name);
   }
-  async getPhoneNumberTextBox() {
-    return this.page.getByRole('textbox', { name: 'Enter phone number' })
+  async fillLastName(name: string) {
+    await this.lastNameField.fill(name);
   }
-  async getCountryDropDown() {
-    return this.page.getByRole('combobox')
+  async fillPhoneNumber(phone: string) {
+    await this.phoneNumberField.fill(phone);
   }
-  async getEmailTextBox() {
-    return this.page.getByRole('textbox', { name: 'Email' })
+  async selectCountry(country: string) {
+    await this.countryDropDown.selectOption({ label: country });
   }
-  async getPasswordTextBox() {
-    return this.page.getByRole('textbox', { name: 'Password' })
+  async fillEmailField(country: string) {
+    await this.emailField.fill(country);
   }
-  async getCheckBox() {
-    return this.page.getByRole('checkbox')
-  }
-  async getRegisterButton() {
-    return this.page.getByRole('button', { name: 'Register' })
-  }
-  async getSuccessAlert() {
-    return this.page.getByRole('alert')
-  }
-  async getIFrameLocator() {
-    return this.page.frameLocator('#iframe-checkboxes')
-  }
-  async getIFrameLearnMoreButton () {
-    return (await this.getIFrameLocator()).getByRole('button', { name: 'Learn more' })
-  }
-  async getIFrameShowTextLocator() {
-    return (await this.getIFrameLocator()).locator('#show-text')
-  }
-  async getCheckBoxLabels() {
-    return this.page.locator('.form-check label')
-  }
-  async getSubmitButton() {
-    return this.page.getByRole('button', { name: 'Submit' })
-  }
-  async getInnerTextsOfCheckBoxLabels() {
-    return (await this.getCheckBoxLabels()).allInnerTexts()
-  }
-  async getResultText() {
-    return this.page.locator('#result-text')
-  }
-  async clickAtIFrameLearnMoreButton () {
-    await (await this.getIFrameLearnMoreButton()).click()
-  }
-  async fillFirstNameField() {
-    await (await this.getFirstNameLabel()).type(faker.person.firstName())
-  }
-  async fillLastNameField() {
-    await (await this.getLastNameLabel()).type(faker.person.lastName())
-  }
-  async fillPhoneNumberField() {
-    await (await this.getPhoneNumberTextBox()).type(faker.phone.number({ style: 'international' }))
-  }
-  async selectCountryOption() {
-    await (await this.getCountryDropDown()).selectOption(faker.location.country())
-  }
-  async fillEmailField() {
-    await (await this.getEmailTextBox()).type(faker.internet.email())
-  }
-  async fillPasswordField() {
-    await (await this.getPasswordTextBox()).type(faker.internet.password())
+  async fillPasswordField(password: string) {
+    await this.passwordField.fill(password);
   }
   async checkTermsAndConditionsCheckbox() {
-    await (await this.getCheckBox()).check()
+    await this.checkBoxes.check()
   }
   async clickAtRegisterButton() {
-    await (await this.getRegisterButton()).click()
+    await this.registerButton.click()
   }
   async checkAllCheckBoxes() {
-    for (const checkbox of await (await this.getCheckBox()).all()) {
+    for (const checkbox of await this.checkBoxes.all()) {
         await checkbox.check()
         await expect(checkbox).toBeChecked()
     }
   }
-  async checkSpecificCheckBox(index) {
-    await (await this.getCheckBox()).nth(index).check()
+  async checkSpecificCheckBox(index: number) {
+    await this.checkBoxes.nth(index).check()
   }
   async clickAtSubmitButton() {
-    await (await this.getSubmitButton()).click()
+    await this.submitButton.click()
+  }
+  async clickAtIFrameLearnMoreButton () {
+    await this.iFrameLearnMoreButton.click()
+  }
+  async innerTextsOfCheckBoxes() {
+    return await this.innerTextsOfCheckBoxLabels.allInnerTexts()
   }
 }
