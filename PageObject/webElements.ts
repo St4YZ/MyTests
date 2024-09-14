@@ -38,8 +38,8 @@ export class Actions extends WebElements {
   async selectCountry(country: string) {
     await this.countryDropDown.selectOption({ label: country });
   }
-  async fillEmailField(country: string) {
-    await this.emailField.fill(country);
+  async fillEmailField(email: string) {
+    await this.emailField.fill(email);
   }
   async fillPasswordField(password: string) {
     await this.passwordField.fill(password);
