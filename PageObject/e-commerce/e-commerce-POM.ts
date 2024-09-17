@@ -26,7 +26,7 @@ class WebElements {
     readonly nextButton: Locator = this.page.getByRole('button', { name: 'Next' })
     readonly placeOrderButton: Locator = this.page.getByRole('button', { name: 'Place Order' })
     readonly successPurchaseMessage: Locator = this.page.getByRole('heading', { name: 'Thank you for your purchase!' })
-    readonly addToCompareButton: Locator =  this.page.getByRole('link', { name: 'Add to Compare' })
+    readonly addToCompareButton: Locator = this.page.getByRole('link', { name: 'Add to Compare' })
     readonly homePageLinkButton: Locator = this.page.getByRole('link', { name: 'Home' })
     readonly productItemsName: Locator = this.page.locator('.product-item-name')
     readonly comparisonListLink: Locator = this.page.getByRole('link', { name: 'Comparison list' })
@@ -71,30 +71,39 @@ export class Actions extends WebElements {
     }
     async fillEmailField(email: string) {
         await this.emailAddressField.fill(email)
+        expect(await this.emailAddressField.inputValue()).toBe(email);
     }
     async fillFirstNameField(name: string) {
         await this.firstNameField.fill(name)
+        expect(await this.firstNameField.inputValue()).toBe(name);
     }
     async fillLastNameField(name: string) {
         await this.lastNameField.fill(name)
+        expect(await this.lastNameField.inputValue()).toBe(name);
     }
     async fillCompanyField(company: string) {
         await this.companyField.fill(company)
+        expect(await this.companyField.inputValue()).toBe(company);
     }
     async fillAddressField(address: string) {
         await this.streetAddressField.first().fill(address)
+        expect(await this.streetAddressField.first().inputValue()).toBe(address);
     }
     async fillCityField(city: string) {
         await this.cityField.fill(city)
+        expect(await this.cityField.inputValue()).toBe(city);
     }
     async fillZipPostalCodeField(postal: string) {
         await this.zipPostalCodeField.fill(postal)
+        expect(await this.zipPostalCodeField.inputValue()).toBe(postal);
     }
     async fillPhoneNumberField(phone: string) {
         await this.phoneNumberField.fill(phone)
+        expect(await this.phoneNumberField.inputValue()).toBe(phone);
     }
     async selectCountryDropdownOption(label: string) {
         await this.countryDropdown.selectOption(label)
+        expect(await this.countryDropdown.locator('option:checked').textContent()).toBe(label);
     }
     async waitForShippingAlertToBeHidden() {
         await this.shippingAlert.waitFor({ state: 'hidden' })
@@ -140,4 +149,31 @@ export class Actions extends WebElements {
         const addToCartButtons = await this.page.$$('.tocart');
         await addToCartButtons[lowestPriceIndex].click();
     }
+    async selectManShortsProductSizeAndColor(productNum: number, productSize: number, productColor: number) {
+        await this.clickAtMenCategory()
+        await this.clickAtShortsSubCategory()
+        await this.clickAtProductItem(productNum)
+        await this.selectSizeOption(productSize)
+        await this.selectColorOption(productColor)
+    }
+    async goToFillingShippingAddress() {
+        await this.waitForAlertMessageToBeVisible(0)
+        await this.clickAtShoppingCartLink()
+        await this.clickAtProceedToCheckOutButton()
+    }
+    async placingShippingOrder() {
+        await this.waitForShippingAlertToBeHidden()
+        await this.clickAtShippingMethodRadioButton()
+        await this.clickAtNextButton()
+        await this.clickAtPlaceOrderButton()
+    }
+    async addProductToComparisonAndBackToHomePage() {
+        await this.clickAtAddToCompareButton()
+        await this.clickAtHomePageLinkButton()
+    }
+    async gotoProductToComparisonPage() {
+        await this.clickAtAddToCompareButton()
+        await this.clickAtComparisonListLink()
+    }
+    
 }
