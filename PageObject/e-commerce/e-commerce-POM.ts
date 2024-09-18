@@ -6,6 +6,8 @@ class WebElements {
     readonly menCategory: Locator = this.page.getByText('Men', { exact: true })
     readonly shortsSubCategory: Locator = this.page.getByRole('link', { name: 'Shop Shorts' })
     readonly productItem: Locator = this.page.locator(".product-item")
+    readonly wishProductItems: Locator = this.page.locator('#wishlist-view-form .product-item-info')
+    readonly removeItemFromWishListButton: Locator = this.page.getByRole('link', {name: 'Remove Item'})
     readonly sizeOption: Locator = this.page.getByRole('listbox', { name: 'Size' }).getByRole('option')
     readonly colorOption: Locator = this.page.getByRole('listbox', { name: 'Color' }).getByRole('option')
     readonly addToCartButton: Locator = this.page.getByRole('button', { name: 'Add to Cart' })
@@ -30,6 +32,7 @@ class WebElements {
     readonly homePageLinkButton: Locator = this.page.getByRole('link', { name: 'Home' })
     readonly productItemsName: Locator = this.page.locator('.product-item-name')
     readonly comparisonListLink: Locator = this.page.getByRole('link', { name: 'Comparison list' })
+    readonly wishListButton: Locator = this.page.getByRole('link', {name: 'Add to Wish List'})
     constructor(readonly page: Page) {
         this.page = page;
     }
@@ -175,5 +178,16 @@ export class Actions extends WebElements {
         await this.clickAtAddToCompareButton()
         await this.clickAtComparisonListLink()
     }
-    
+    async addProductToWishList(productNum: number, productSize: number, productColor: number) {
+        await this.clickAtMenCategory()
+        await this.clickAtShortsSubCategory()
+        await this.clickAtProductItem(productNum)
+        await this.selectSizeOption(productSize)
+        await this.selectColorOption(productColor)
+        await this.wishListButton.click()
+    }
+    async deleteItemFromWishList(){
+        await this.wishProductItems.hover()
+        await this.removeItemFromWishListButton.click()
+    }
 }

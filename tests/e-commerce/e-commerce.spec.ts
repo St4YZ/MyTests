@@ -1,8 +1,6 @@
-import { test, expect } from '@playwright/test';
-import { Actions } from '../../PageObject/e-commerce/e-commerce-POM';
+import { test, expect } from '../../src/app/fixtures/baseFixture';
 
-test('Buying the product', async ({ page }) => {
-    const actions = new Actions(page);
+test('Buying the product', async ({ actions }) => {
     await actions.gotoMagentoCommerce();
     await actions.selectManShortsProductSizeAndColor(1,0,0)
     await actions.clickAtAddToCartButton()
@@ -12,8 +10,7 @@ test('Buying the product', async ({ page }) => {
     await expect(actions.successPurchaseMessage).toBeVisible()
 })
 
-test('Comparing the product', async ({ page }) => {
-    const actions = new Actions(page);
+test('Comparing the product', async ({ actions }) => {
     await actions.gotoMagentoCommerce();
     await actions.selectManShortsProductSizeAndColor(0,0,0)
     await actions.addProductToComparisonAndBackToHomePage()
